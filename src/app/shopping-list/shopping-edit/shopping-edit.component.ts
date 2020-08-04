@@ -7,7 +7,8 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-shopping-edit',
   templateUrl: './shopping-edit.component.html',
-  styleUrls: ['./shopping-edit.component.css']
+  styleUrls: ['./shopping-edit.component.css'],
+  exportAs: 'ngForm'
 })
 export class ShoppingEditComponent implements OnInit, OnDestroy {
 
