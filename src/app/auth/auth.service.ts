@@ -5,12 +5,14 @@ import { catchError, tap } from 'rxjs/operators';
 import { throwError, BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 
+import { environment } from '../../environments/environment';
+
 export interface AuthResponseData {
   idToken:string;
   email:string;
   refreshToken:string;
   expiresIn:string;
-  localId:string;	
+  localId:string;
   registered?:boolean;
 }
 
@@ -27,7 +29,7 @@ export class AuthService {
 
   signUp(email: string, password: string) {
     return this.http.post<AuthResponseData>(
-      'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCfpVsgclKFH8QowzJIPcUxO52mYsDyOEM',
+      'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + environment.firebaseAPIkey,
       {
         email,
         password,
@@ -35,9 +37,9 @@ export class AuthService {
       }
     ).pipe(catchError(this.handleError), tap(responseData => {
         this.handleAuthentication(
-          responseData.email, 
-          responseData.localId, 
-          responseData.idToken, 
+          responseData.email,
+          responseData.localId,
+          responseData.idToken,
           +responseData.expiresIn
         );
     }));
@@ -45,7 +47,7 @@ export class AuthService {
 
   login(email: string, password: string) {
     return this.http.post<AuthResponseData>(
-      'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCfpVsgclKFH8QowzJIPcUxO52mYsDyOEM',
+      'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + environment.firebaseAPIkey,
       {
         email,
         password,
@@ -53,9 +55,9 @@ export class AuthService {
       }
     ).pipe(catchError(this.handleError), tap(responseData => {
       this.handleAuthentication(
-        responseData.email, 
-        responseData.localId, 
-        responseData.idToken, 
+        responseData.email,
+        responseData.localId,
+        responseData.idToken,
         +responseData.expiresIn
       );
     }));
@@ -72,9 +74,9 @@ export class AuthService {
       return;
     } else {
       const loadedUser = new User(
-                                userData.email, 
-                                userData.id, 
-                                userData._token, 
+                                userData.email,
+                                userData.id,
+                                userData._token,
                                 new Date(userData._tokenExpirationDate));
       if(loadedUser.token) {
         this.autoLogout(new Date(userData._tokenExpirationDate).getTime() - new Date().getTime());
@@ -100,15 +102,15 @@ export class AuthService {
   }
 
   private handleAuthentication(
-      email:string, 
-      userId: string, 
-      token: string, 
+      email:string,
+      userId: string,
+      token: string,
       expIn: number
     ) {
       const expirationDate = new Date(new Date().getTime() + expIn * 1000);
       const user = new User(
-                        email, 
-                        userId, 
+                        email,
+                        userId,
                         token,
                         expirationDate);
       this.user.next(user);
@@ -125,7 +127,7 @@ export class AuthService {
       case 'EMAIL_EXISTS':
         errorMessage = 'User with same email already exists!';
         break;
-    
+
         case 'EMAIL_NOT_FOUND':
           errorMessage = 'User with entered email does not exist!';
           break;
