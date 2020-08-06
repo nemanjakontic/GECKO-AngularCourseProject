@@ -1,3 +1,4 @@
+import { RecipeEffects } from './recipes/store/recipes.effects';
 import { AuthEffects } from './auth/store/auth.effects';
 import  * as fromApp  from './store/app.reducer';
 import { AuthModule } from './auth/auth.module';
@@ -27,7 +28,7 @@ import { EffectsModule } from '@ngrx/effects';
     AuthModule,
     SharedModule,
     StoreModule.forRoot(fromApp.appReducer),
-    EffectsModule.forRoot([AuthEffects])
+    EffectsModule.forRoot([AuthEffects, RecipeEffects])
   ],
   providers: [
     {

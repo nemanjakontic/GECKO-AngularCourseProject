@@ -1,3 +1,4 @@
+import * as RecipeAction from './../recipes/store/recipes.actions';
 import * as AuthActions from './../auth/store/auth.actions';
 import { map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
@@ -33,12 +34,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   onSaveData() {
-    this.dataStorageService.storeRecipes();
+    // this.dataStorageService.storeRecipes();
+    this.store.dispatch(new RecipeAction.StoreRecipes());
   }
 
   onFetchData() {
-    this.dataStorageService.fetchRecipes()
-      .subscribe();
+    // this.dataStorageService.fetchRecipes()
+    //   .subscribe();
+    this.store.dispatch(new RecipeAction.FetchRecipes());
   }
 
   onLogout() {
