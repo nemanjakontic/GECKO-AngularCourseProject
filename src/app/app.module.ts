@@ -21,7 +21,7 @@ import { EffectsModule } from '@ngrx/effects';
     HeaderComponent
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     AppRoutingModule,
     HttpClientModule,
     ShoppingListModule,
